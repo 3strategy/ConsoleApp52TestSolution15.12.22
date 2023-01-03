@@ -207,18 +207,92 @@ Console.ForegroundColor = ConsoleColor.Green;
 Console.WriteLine("\n\nSolution for Q5:");
 MainQ5();
 #endregion
+
+// פתרונות לשאלות נוספות
+#region מטלה 20 שאלת הפרמוטציות
+// יש ליצור ולהדפיס את כל המילים שניתן להרכיב מ-3 אותיות '.
+// from n first letters of the abc...
+// a brute force solution (קיימים אלגוריתמים רקורסיביים ליצירה דטרמיניסטית)
+static void Main7()
+{
+  Random rnd = new Random();
+  PrintAllWords(3);
+  Console.WriteLine();
+  Console.ForegroundColor = ConsoleColor.Blue;
+  PrintAllWords(4);
+  Console.WriteLine();
+  Console.ForegroundColor = ConsoleColor.Green;
+  PrintAllWords(5);
+  Console.WriteLine();
+  // here using internal functions (לא בחומר).
+  // Otherwise it's difficult (or impossible) to have one instance of rnd
+  // throughout all the randomizations...
+  // in a normal console or other app this would not become a problem.
+  // internal functions are לא בחומר
+  // an alternative presentation would be to take these functions out, 
+  // but remove the static MODIFIER from Main7 and from all these functions.
+  int Factorial(int n)
+  {
+    int res = 1;
+    for (int i = 2; i <= n; i++)
+      res *= i;
+    return res;
+  }
+
+  void PrintAllWords(int n)
+  {
+    int fact = Factorial(n);
+    string[] words = new string[fact];
+    for (int i = 0; i < fact; i++)
+    {
+      words[i] = RandomPermutation(n);
+      for (int j = 0; j < i; j++)
+        if (words[j] == words[i])
+        {
+          i--;
+          break;
+        }
+    }
+    foreach (var item in words)
+      Console.WriteLine(item);
+  }
+
+  string RandomPermutation(int n)
+  {
+    char k = 'a';
+    char[] arrTemp = new char[n];
+    int len = arrTemp.Length;
+    for (int i = 0; i < len; i++)
+    {
+      int pos = rnd.Next(len); //choose position, decrease j.
+      while (arrTemp[pos] != '\0')
+        pos = (pos + 1) % len;  // round robin the position.
+                                // assures we will not get index out of range.
+      arrTemp[pos] = k++; //place the letter, and prepare for the next letter.
+    }
+    return new string(arrTemp);//.ToString() will not work!!!
+                               //not sure this version is fully random on long strings.
+  }
+}
+
+Console.ForegroundColor = ConsoleColor.Yellow;
+Console.WriteLine("\n\nSolution for premutations from Matala20 Q4");
+Main7();
+#endregion
 #region NCountOdd, CountZeros questions
 static int NCountOdd(int n, int[] arr)
 {
   int count = 0;
   foreach (var item in arr) // ריצה פשוטה על המערך
     if (NCountOdd1(n, item)) // ספירה במידת הצורך
-      count++; 
+      count++;
   return count;
 }
+
 static bool NCountOdd1(int n, int num)
 { //returns true if the digit d has odd occurences מופיעה מספר אי זוגי של פעמים
-  if (n==num) // zero handling...
+  //called by NCountOdd.
+  if (n == num) // zero handling...
     return true;
   int count = 0;
   while (num > 0)
