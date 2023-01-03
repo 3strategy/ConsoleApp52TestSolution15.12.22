@@ -1,4 +1,6 @@
-﻿static void Q2TavlatMaakav() // לנוחותכם הקוד ששימש לטבלת המעקב 
+﻿using System.Diagnostics;
+
+static void Q2TavlatMaakav() // לנוחותכם הקוד ששימש לטבלת המעקב 
 {
   int[] arr = new int[6]; int i, k; int num;
   i = 0;
@@ -204,4 +206,64 @@ static void MainQ5()
 Console.ForegroundColor = ConsoleColor.Green;
 Console.WriteLine("\n\nSolution for Q5:");
 MainQ5();
+#endregion
+#region NCountOdd, CountZeros questions
+static int NCountOdd(int n, int[] arr)
+{
+  int count = 0;
+  foreach (var item in arr) // ריצה פשוטה על המערך
+    if (NCountOdd1(n, item)) // ספירה במידת הצורך
+      count++; 
+  return count;
+}
+static bool NCountOdd1(int n, int num)
+{ //returns true if the digit d has odd occurences מופיעה מספר אי זוגי של פעמים
+  if (n==num) // zero handling...
+    return true;
+  int count = 0;
+  while (num > 0)
+  {
+    if (num % 10 == n)
+      count++;
+    num /= 10;
+  }
+  return count % 2 == 1; // מחזיר את אי זוגיות התוצאה: כן/לא
+}
+
+static int CountZeros(long[] arr)
+{ // יש לספור איברים המכילים 0 או דו ספרתיים
+  int count = 0;
+  foreach (var item in arr)
+    if (item < 100 && item > 9 || Has0(item)) count++;
+  return count;
+}
+static bool Has0(long n)
+{ // הפונקציה יודעת לזהות ספרה 0 במספר
+  if (n == 0)
+    return true;
+  while (n > 0) //אלגוריתם פירוק מספר
+  {
+    if (n % 10 == 0) return true;
+    n /= 10;
+  }
+  return false;
+}
+static void MainQ6()
+{
+  Debug.Assert(CountZeros(new long[] { 1, 2, 3 }) == 0, "for { 1, 2, 3 } should return 0");
+  Debug.Assert(CountZeros(new long[] { 0 }) == 1, "not handling 0");
+  Debug.Assert(CountZeros(new long[] { 20, 300, 0 }) == 3, "possible double count");
+  Debug.Assert(CountZeros(new long[] { 20, 305555, 0 }) == 3, "possible double count");
+  Debug.Assert(CountZeros(new long[] { 77 }) == 1, "mishandling 2 digits");
+  Debug.Assert(CountZeros(new long[] { 20, 77, 0 }) == 3, "possible double count");
+  Console.WriteLine("All assertions for CoutZeroes are successfull");
+
+  Debug.Assert(NCountOdd(3, new int[] { 33030, 3, 33 }) == 2, "3,{ 33030,3,33} should return 2");
+  Debug.Assert(NCountOdd(4, new int[] { 34030, 4, 4404 }) == 3, "3,{ 33030,3,33} should return 3");
+  Debug.Assert(NCountOdd(0, new int[] { 33030, 0, 33 }) == 1, "3,{ 33030,3,33} should return 2");
+  Console.WriteLine("All assertions for NCountOdd are successfull");
+}
+Console.ForegroundColor = ConsoleColor.Blue;
+Console.WriteLine("\n\nSolution for 2.1.2023 Class questions:");
+MainQ6();
 #endregion
