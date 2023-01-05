@@ -328,9 +328,12 @@ static void MainQ6()
   Debug.Assert(CountZeros(new long[] { 0 }) == 1, "not handling 0");
   Debug.Assert(CountZeros(new long[] { 20, 300, 0 }) == 3, "possible double count");
   Debug.Assert(CountZeros(new long[] { 20, 305555, 0 }) == 3, "possible double count");
-  Debug.Assert(CountZeros(new long[] { 77 }) == 1, "mishandling 2 digits");
+  Debug.Assert(CountZeros(new long[] { 9218, 77, 0 }) == 2, "mishandling 2 digits");
   Debug.Assert(CountZeros(new long[] { 20, 77, 0 }) == 3, "possible double count");
-  Console.WriteLine("All assertions for CoutZeroes are successfull");
+  long[] a = { 20, 77, 0 };
+  CountZeros(a);
+  Debug.Assert(a[0] == 20, "your code changed items in the array");
+  Console.WriteLine("All assertions for CoutZeroes are successful");
 
   Debug.Assert(NCountOdd(3, new int[] { 33030, 3, 33 }) == 2, "3,{ 33030,3,33} should return 2");
   Debug.Assert(NCountOdd(4, new int[] { 34030, 4, 4404 }) == 3, "3,{ 33030,3,33} should return 3");
