@@ -238,9 +238,9 @@ static void Main7()
       res *= i;
     return res;
   }
-
-  void PrintAllWords(int n)
+  string[] GetAllWords(int n)
   {
+    //במחשבה שנייה עדיף לפצל אגם לפונקציה שמחזירה מערך ובו כל המילים
     int fact = Factorial(n);
     string[] words = new string[fact];
     for (int i = 0; i < fact; i++)
@@ -253,8 +253,21 @@ static void Main7()
           break;
         }
     }
+    return words;
+  }
+  void PrintAllWords(int n)
+  {
+    // משאיר לפונקציה המדפיסה רק את ההדפסה
+    // ובדיקת התקינות של הערכים שהוחזרו
+    // הפיצול לפונקציות שעושות חלקים קטנים מקל על הדיבוג 
+    string[] words = GetAllWords(n);
     foreach (var item in words)
       Console.WriteLine(item);
+    // בדיקת תקינות - האם יש כפילויות במערך
+    // לא מיועד לשימוש בבגרות 
+    // comparer למי שישתמשו בעצמים - יש צורך להוסיף 
+    // וזה לגמרי לא בחומר
+    Debug.Assert(words.Distinct().Count() == words.Length);
   }
 
   string RandomPermutation(int n)
