@@ -208,14 +208,16 @@ Console.WriteLine("\n\nSolution for Q5:");
 MainQ5();
 #endregion
 
-// פתרונות לשאלות נוספות
-#region מטלה 20 שאלת הפרמוטציות
+// פתרונות לשאלות ממטלות
+#region מטלה 20
+#region שאלת הפרמוטציות
 // יש ליצור ולהדפיס את כל המילים שניתן להרכיב מ-3 אותיות '.
 // from n first letters of the abc...
 // a brute force solution (קיימים אלגוריתמים רקורסיביים ליצירה דטרמיניסטית)
 static void Main7()
 {
   Random rnd = new Random();
+  Console.WriteLine("\n finding permutations radnomly:");
   PrintAllWords(3);
   Console.WriteLine();
   Console.ForegroundColor = ConsoleColor.Blue;
@@ -292,7 +294,38 @@ Console.ForegroundColor = ConsoleColor.Yellow;
 Console.WriteLine("\n\nSolution for premutations from Matala20 Q4");
 Main7();
 #endregion
-#region NCountOdd, CountZeros questions
+#region שאלת ניתוח המחרוזות
+Console.ForegroundColor = ConsoleColor.Red;
+string[] tetKids = { "Ziv Geller", "Tahel Tal",
+  "Guy Siedes", "בתאל ש", "גיא פנקינסקי"};
+
+int[] res = AnalyzeNames(tetKids);
+Console.WriteLine($"\n\nSolution for Matala 20 Q1:\n אל appears in {res[0]} names");
+Console.WriteLine($"we have {res[1]} long names");
+Console.WriteLine($"we have {res[2]} student(s) with identical first and last letters");
+
+static int[] AnalyzeNames(string[] tetKids)
+{
+  int[] counters = new int[3];//להכניס את התוצאות
+  foreach (string name in tetKids)
+  {
+    //part 1:
+    if (name.Contains("אל"))
+      counters[0]++;
+    //part 2:
+    if (name.Length > 8)
+      counters[1]++;
+    //part 3:
+    int indSpace = name.IndexOf(' ');
+    if (name[0] == name[indSpace + 1])
+      counters[2]++;
+  }
+  return counters;
+}
+#endregion
+#endregion
+
+#region NCountOdd, CountZeros questions, מטלה 21 החדרת ספרה למספר
 static int NCountOdd(int n, int[] arr)
 {
   int count = 0;
@@ -335,8 +368,17 @@ static bool Has0(long n)
   }
   return false;
 }
-static void MainQ6()
+static int Insert(int pos, int digit, int num)
 {
+  int divider = (int)Math.Pow(10, pos);
+  int right = num % divider;
+  int left = num / divider;
+  int res = digit * divider + left * divider * 10 + right;
+  return res;
+}
+static void MainMatala21()
+{
+  // CountZeros בדיקת 
   Debug.Assert(CountZeros(new long[] { 1, 2, 3 }) == 0, "for { 1, 2, 3 } should return 0");
   Debug.Assert(CountZeros(new long[] { 0 }) == 1, "not handling 0");
   Debug.Assert(CountZeros(new long[] { 20, 300, 0 }) == 3, "possible double count");
@@ -346,14 +388,103 @@ static void MainQ6()
   long[] a = { 20, 77, 0 };
   CountZeros(a);
   Debug.Assert(a[0] == 20, "your code changed items in the array");
-  Console.WriteLine("All assertions for CoutZeroes are successful");
+  Console.WriteLine("All assertions for CoutZeroes are successful\n");
 
+  // NCountOdd בדיקת 
   Debug.Assert(NCountOdd(3, new int[] { 33030, 3, 33 }) == 2, "3,{ 33030,3,33} should return 2");
   Debug.Assert(NCountOdd(4, new int[] { 34030, 4, 4404 }) == 3, "3,{ 33030,3,33} should return 3");
   Debug.Assert(NCountOdd(0, new int[] { 33030, 0, 33 }) == 1, "3,{ 33030,3,33} should return 2");
-  Console.WriteLine("All assertions for NCountOdd are successfull");
+  Console.ForegroundColor = ConsoleColor.Green;
+  Console.WriteLine("\nAll assertions for NCountOdd are successfull\n");
+
+  // Insert בדיקת שאלת החדרת ספרה למספר 
+  Debug.Assert(Insert(0, 8, 5533) == 55338);
+  Debug.Assert(Insert(1, 7, 5533) == 55373);
+  Debug.Assert(Insert(3, 8, 199999) == 1998999);
+  Debug.Assert(Insert(6, 8, 199999) == 8199999);
+  Debug.Assert(Insert(7, 8, 199999) == 80199999); //טיפה שונה…
+  Console.ForegroundColor = ConsoleColor.Yellow;
+  Console.WriteLine("\nAll assertions for Insert are successfull\n");
 }
 Console.ForegroundColor = ConsoleColor.Blue;
-Console.WriteLine("\n\nSolution for 2.1.2023 Class questions:");
-MainQ6();
+Console.WriteLine("\n\nSolution for Some Matala 21 questions:");
+MainMatala21();
 #endregion
+#region מטלה 22 בדיקת שכיחות הטלות קוביה,
+static long[] ThrowDice(long n)
+{
+  // נניח לצורך הפתרון ש-0 מייצג 6 בקוביה
+  // וכל מספר אחר מייצג את עצמו 
+  // ניתן לחילופין להגדיר ייצוג אחר
+  // או להגדיר מערך בגדול 7
+  long[] frequencies = new long[6];
+  Random rnd = new Random();
+  for (int i = 0; i < n; i++)
+    frequencies[rnd.Next(6)]++;
+  return frequencies;
+}
+static void MainMatala22()
+{
+  long[] res = ThrowDice(100000);
+  double ratio = res.Min() / (double)res.Max(); // critical to add 0.0 before the division
+  // or cast to (double) before the division. Otherwise your ratio will be 1, 
+  // regardless of the accuracy of your random function.
+  Console.WriteLine("\nFrequency ratio between min to max dice results\n" + ratio);
+  if (ratio < 0.95)
+    Console.WriteLine("Something is probably wrong with your randomization");
+}
+
+Console.ForegroundColor = ConsoleColor.Red;
+MainMatala22();
+
+#endregion
+
+#region ( ניתוח סדרה עולה ( לא במטלות:
+// שאלת הסדרה העולה. לא נמצאת במטלות.
+Console.ForegroundColor = ConsoleColor.Yellow;
+Console.WriteLine("\nSequence Analysis:\n" + IsRising(new int[] { 1, 3, 5 }));
+Console.WriteLine(IsRising(new int[] { 3, 3, 3 }));
+Console.WriteLine(IsRising(new int[] { 5, 3, 1 }));
+Console.WriteLine(IsRising(new int[] { 5, 3, 3 }));
+Console.WriteLine(IsRising(new int[] { 1, 3, 3 }));
+Console.WriteLine(IsRising(new int[] { 1, 3, 1 }));
+static string IsRising(int[] nums)
+{
+  bool IsRising = true;
+  bool IsDescending = true;
+  bool IsRisingWeak = true;
+  bool IsDescendingWeak = true;
+  for (int i = 0; i < nums.Length - 1; i++)
+  {
+    if (nums[i] > nums[i + 1])
+    {
+      IsRising = false;
+      IsRisingWeak = false;
+    }
+    else if (nums[i] < nums[i + 1])
+    {
+      IsDescending = false;
+      IsDescendingWeak = false;
+    }
+    else //are equal
+    {
+      IsDescending = false;
+      IsRising = false;
+    }
+  }
+  if (IsRising)
+    return "IsRising";
+  else if (IsDescending)
+    return "IsDescending";
+  else if (IsRisingWeak && IsDescendingWeak)
+    return "Constant";
+  else if (IsRisingWeak)
+    return "IsRisingWeak";
+  else if (IsDescendingWeak)
+    return "IsDescendingWeak";
+  else return "None";
+}
+
+#endregion
+
+Console.ForegroundColor = ConsoleColor.White;
